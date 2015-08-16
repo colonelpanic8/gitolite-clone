@@ -1,3 +1,5 @@
+[[http://melpa.org/#/gitolite-clone][file:http://melpa.org/packages/gitolite-clone-badge.svg]]
+
 gitolite-clone provides a cached completing read of the repositories available on a gitolite server and the ability to set rules for how repositories should be cloned.
 
 * Installation
