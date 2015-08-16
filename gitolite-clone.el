@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: gitolite clone git
-;; URL: https://github.com/IvanMalison/gitolite-cloone
+;; URL: https://github.com/IvanMalison/gitolite-clone
 ;; Version: 0.1.0
 ;; Package-Requires: ((dash "2.10.0") (s "1.9.0") (pcache "0.3.1") (emacs "24"))
 
