@@ -4,7 +4,7 @@ gitolite-clone provides a cached completing read of the repositories available o
 
 * Installation
 
-Install from MELPA with ~M-x package-install org-projectile~. See the [[https://github.com/milkypostman/melpa][melpa repository]] for details about how to set up MELPA if you have not already done so.
+Install from MELPA with ~M-x package-install gitolite-clone~. See the [[https://github.com/milkypostman/melpa][melpa repository]] for details about how to set up MELPA if you have not already done so.
 * Setup
 Setup for gitolite-clone is pretty simple. All you really need to do is specify the gitolite host you would like to use:
 
