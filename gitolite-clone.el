@@ -33,55 +33,55 @@
 (require 'pcache)
 (require 's)
 
-(defvar gitolite-clone:pcache-repository (pcache-repository "gitolite-clone"))
-(defvar gitolite-clone:username "gitolite")
-(defvar gitolite-clone:host)
-(defvar gitolite-clone:ttl (* 60 60 24 3)) ;; 3 day ttl by default
-(defvar gitolite-clone:base-path "~")
-(defvar gitolite-clone:determine-target 'gitolite-clone:default-determine-target)
-(defvar gitolite-clone:action 'gitolite-clone:default-action)
+(defvar gitolite-clone-pcache-repository (pcache-repository "gitolite-clone"))
+(defvar gitolite-clone-username "gitolite")
+(defvar gitolite-clone-host)
+(defvar gitolite-clone-ttl (* 60 60 24 3)) ;; 3 day ttl by default
+(defvar gitolite-clone-base-path "~")
+(defvar gitolite-clone-determine-target 'gitolite-clone-default-determine-target)
+(defvar gitolite-clone-action 'gitolite-clone-default-action)
 
-(defun gitolite-clone:default-determine-target (username host repo-name)
-  (format "%s/%s" gitolite-clone:base-path (-last-item (s-split "/" repo-name))))
+(defun gitolite-clone-default-determine-target (username host repo-name)
+  (format "%s/%s" gitolite-clone-base-path (-last-item (s-split "/" repo-name))))
 
-(defun gitolite-clone:default-action (username host repo-name target)
+(defun gitolite-clone-default-action (username host repo-name target)
   (dired target))
 
-(defun gitolite-clone:info-command (username host)
+(defun gitolite-clone-info-command (username host)
   (format "ssh %s@%s info" username host))
 
-(defun gitolite-clone:get-projects-list-string (username host)
-  (shell-command-to-string (gitolite-clone:info-command username host)))
+(defun gitolite-clone-get-projects-list-string (username host)
+  (shell-command-to-string (gitolite-clone-info-command username host)))
 
-(defun gitolite-clone:repo-matches (projects-list-string)
+(defun gitolite-clone-repo-matches (projects-list-string)
   (s-match-strings-all "^ \[RWC ]*	\\(\[^ *\]*\\)$" projects-list-string))
 
-(defun gitolite-clone:parse-projects-list-string (projects-list-string)
-  (cl-loop for matches in (gitolite-clone:repo-matches projects-list-string)
+(defun gitolite-clone-parse-projects-list-string (projects-list-string)
+  (cl-loop for matches in (gitolite-clone-repo-matches projects-list-string)
            when (not (s-contains? "*" (nth 1 matches)))
            collect (nth 1 matches)))
 
-(defun gitolite-clone:get-projects (&optional username host force-refresh)
-  (unless username (setq username gitolite-clone:username))
-  (unless host (setq host gitolite-clone:host))
+(defun gitolite-clone-get-projects (&optional username host force-refresh)
+  (unless username (setq username gitolite-clone-username))
+  (unless host (setq host gitolite-clone-host))
   (let ((result-key (intern (format "%s@%s" username host))))
-    (unless (and (pcache-has gitolite-clone:pcache-repository result-key) (not force-refresh))
-      (pcache-put gitolite-clone:pcache-repository result-key
-                  (gitolite-clone:parse-projects-list-string
-                   (gitolite-clone:get-projects-list-string username host)) gitolite-clone:ttl))
-    (pcache-get gitolite-clone:pcache-repository result-key)))
+    (unless (and (pcache-has gitolite-clone-pcache-repository result-key) (not force-refresh))
+      (pcache-put gitolite-clone-pcache-repository result-key
+                  (gitolite-clone-parse-projects-list-string
+                   (gitolite-clone-get-projects-list-string username host)) gitolite-clone-ttl))
+    (pcache-get gitolite-clone-pcache-repository result-key)))
 
-(defun gitolite-clone:select-repository (&optional username host)
-  (completing-read "Choose a repository:" (gitolite-clone:get-projects username host)))
+(defun gitolite-clone-select-repository (&optional username host)
+  (completing-read "Choose a repository:" (gitolite-clone-get-projects username host)))
 
 ;;;###autoload
-(defun gitolite-clone:clone-repo (&optional username host determine-target action)
+(defun gitolite-clone-clone-repo (&optional username host determine-target action)
   (interactive)
-  (unless username (setq username gitolite-clone:username))
-  (unless host (setq host gitolite-clone:host))
-  (unless determine-target (setq determine-target gitolite-clone:determine-target))
-  (unless action (setq action gitolite-clone:action))
-  (let* ((repository (gitolite-clone:select-repository))
+  (unless username (setq username gitolite-clone-username))
+  (unless host (setq host gitolite-clone-host))
+  (unless determine-target (setq determine-target gitolite-clone-determine-target))
+  (unless action (setq action gitolite-clone-action))
+  (let* ((repository (gitolite-clone-select-repository))
          (target (funcall determine-target username host repository))
          (git-command (format "git clone %s@%s:%s %s" username host repository target)))
     (unless (file-exists-p target)
