@@ -34,10 +34,18 @@
 (require 's)
 
 (defvar gitolite-clone-pcache-repository (pcache-repository "gitolite-clone"))
-(defvar gitolite-clone-username "gitolite")
-(defvar gitolite-clone-host)
-(defvar gitolite-clone-ttl (* 60 60 24 3)) ;; 3 day ttl by default
-(defvar gitolite-clone-base-path "~")
+(defcustom gitolite-clone-username "gitolite"
+  "The username that will be used to connect to gitolite by gitoline-clone."
+  :group 'gitolite-clone)
+(defcustom gitolite-clone-host ""
+  "The gitolite host that will be connected to by default by gitoline-clone."
+  :group 'gitolite-clone)
+(defcustom gitolite-clone-ttl (* 60 60 24 3)
+  "The default pcache ttl that will be used for caching repository results from gitolite."
+  :group 'gitolite-clone)
+(defcustom gitolite-clone-base-path "~"
+  "The base path to which `gitolite-clone-default-determine-target' will clone repositories"
+  :group 'gitolite-clone)
 (defvar gitolite-clone-determine-target 'gitolite-clone-default-determine-target)
 (defvar gitolite-clone-action 'gitolite-clone-default-action)
 
