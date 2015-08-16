@@ -49,6 +49,7 @@
 
 (defun gitolite-clone-info-command (username host)
   (format "ssh %s@%s info" username host))
+  (format "ssh %s@%s info" (shell-quote-argument username) (shell-quote-argument host)))
 
 (defun gitolite-clone-get-projects-list-string (username host)
   (shell-command-to-string (gitolite-clone-info-command username host)))
@@ -98,7 +99,9 @@ for this argument."
   (unless action (setq action gitolite-clone-action))
   (let* ((repository (gitolite-clone-select-repository))
          (target (funcall determine-target username host repository))
-         (git-command (format "git clone %s@%s:%s %s" username host repository target)))
+         (git-command (format "git clone %s@%s:%s %s" (shell-quote-argument username)
+                              (shell-quote-argument host) (shell-quote-argument repository)
+                              (shell-quote-argument target))))
     (unless (file-exists-p target)
       (shell-command git-command))
     (when (file-exists-p target)
