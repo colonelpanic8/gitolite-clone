@@ -14,4 +14,4 @@ Setup for gitolite-clone is pretty simple. All you really need to do is specify 
 
 There are a bunch of other variables that you can customize -- they are all pretty self-explanatory, but I will try to get around to documenting them soon.
 * Usage
-``M-x gitolite-clone:clone-repo`` is pretty much all there is to it. If you haven't yet obtained the list of repos from your gitolite server this could take a bit. gitolite-clone uses [[https://github.com/sigma/pcache][pcache]] to cache results from the gitolite server (on a per server basis). gitolite-clone uses a default ttl of 3 days. Keep in mind that this means that new repositories usually won't appear immediately unless you force a refresh of the cache.
+``M-x gitolite-clone`` is pretty much all there is to it. If you haven't yet obtained the list of repos from your gitolite server this could take a bit. gitolite-clone uses [[https://github.com/sigma/pcache][pcache]] to cache results from the gitolite server (on a per server basis). gitolite-clone uses a default ttl of 3 days. Keep in mind that this means that new repositories usually won't appear immediately unless you force a refresh of the cache.
