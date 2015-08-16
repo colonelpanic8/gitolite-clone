@@ -42,27 +42,45 @@
 (defvar gitolite-clone-action 'gitolite-clone-default-action)
 
 (defun gitolite-clone-default-determine-target (username host repo-name)
+  "A sensible default for determining the path to which repositories are cloned.
+
+USERNAME and HOST are ignored. The folder will reside in
+`gitolite-clone-base-path' and its name will be the text
+following the final '/' in REPO-NAME."
   (format "%s/%s" gitolite-clone-base-path (-last-item (s-split "/" repo-name))))
 
 (defun gitolite-clone-default-action (username host repo-name target)
+  "Open dired at on the newly cloned repository.
+
+USERNAME, HOST, and REPO-NAME are ignored. Dired will be opened at TARGET."
   (dired target))
 
 (defun gitolite-clone-info-command (username host)
-  (format "ssh %s@%s info" username host))
+  "Generate command to retrieve the list of repositories from gitolite.
+
+USERNAME is the username used on the gitolite server and HOST is
+the hostname of the gitolite server."
   (format "ssh %s@%s info" (shell-quote-argument username) (shell-quote-argument host)))
 
 (defun gitolite-clone-get-projects-list-string (username host)
+  "Make a call to the gitolite server to retrieve list of repos.
+a custom username can be provided with USERNAME and custom host
+can be probided with HOST."
   (shell-command-to-string (gitolite-clone-info-command username host)))
 
-(defun gitolite-clone-repo-matches (projects-list-string)
-  (s-match-strings-all "^ \[RWC ]*	\\(\[^ *\]*\\)$" projects-list-string))
-
 (defun gitolite-clone-parse-projects-list-string (projects-list-string)
-  (cl-loop for matches in (gitolite-clone-repo-matches projects-list-string)
+    "Get all lines that correspond to an actual repository from PROJECTS-LIST-STRING."
+  (cl-loop for matches in (s-match-strings-all "^ \[RWC ]*	\\(\[^ *\]*\\)$" projects-list-string)
            when (not (s-contains? "*" (nth 1 matches)))
            collect (nth 1 matches)))
 
 (defun gitolite-clone-get-projects (&optional username host force-refresh)
+  "Retrieve and parse the list of projects available from gitolite.
+
+USERNAME is the username used on the gitolite server and HOST is
+the hostname of the gitolite server. The retrieval is cached an
+will only occur if the result has not already been stored.
+FORCE-REFRESH makes it so that the cache is ignored when non nil."
   (unless username (setq username gitolite-clone-username))
   (unless host (setq host gitolite-clone-host))
   (let ((result-key (intern (format "%s@%s" username host))))
@@ -73,6 +91,10 @@
     (pcache-get gitolite-clone-pcache-repository result-key)))
 
 (defun gitolite-clone-select-repository (&optional username host)
+  "Pick a repository from the one available from the gitolite server.
+
+USERNAME is the username used on the gitolite server and HOST is
+the hostname of the gitolite server."
   (completing-read "Choose a repository:" (gitolite-clone-get-projects username host)))
 
 ;;;###autoload
