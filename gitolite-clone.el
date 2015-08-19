@@ -103,7 +103,7 @@ FORCE-REFRESH makes it so that the cache is ignored when non nil."
 
 USERNAME is the username used on the gitolite server and HOST is
 the hostname of the gitolite server."
-  (completing-read "Choose a repository:" (gitolite-clone-get-projects username host)))
+  (completing-read "Choose a repository: " (gitolite-clone-get-projects username host)))
 
 ;;;###autoload
 (defun gitolite-clone (&optional username host determine-target action)
