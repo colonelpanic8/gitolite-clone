@@ -92,10 +92,12 @@ FORCE-REFRESH makes it so that the cache is ignored when non nil."
   (unless username (setq username gitolite-clone-username))
   (unless host (setq host gitolite-clone-host))
   (let ((result-key (intern (format "%s@%s" username host))))
-    (unless (and (pcache-has gitolite-clone-pcache-repository result-key) (not force-refresh))
+    (unless (and (pcache-has gitolite-clone-pcache-repository result-key)
+                 (not force-refresh))
       (pcache-put gitolite-clone-pcache-repository result-key
                   (gitolite-clone-parse-projects-list-string
-                   (gitolite-clone-get-projects-list-string username host)) gitolite-clone-ttl))
+                   (gitolite-clone-get-projects-list-string username host))
+                  gitolite-clone-ttl))
     (pcache-get gitolite-clone-pcache-repository result-key)))
 
 (defun gitolite-clone-select-repository (&optional username host)
@@ -103,7 +105,8 @@ FORCE-REFRESH makes it so that the cache is ignored when non nil."
 
 USERNAME is the username used on the gitolite server and HOST is
 the hostname of the gitolite server."
-  (completing-read "Choose a repository: " (gitolite-clone-get-projects username host)))
+  (completing-read "Choose a repository: "
+                   (gitolite-clone-get-projects username host)))
 
 ;;;###autoload
 (defun gitolite-clone (&optional username host determine-target action)
