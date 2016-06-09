@@ -137,5 +137,10 @@ for this argument."
     (when (file-exists-p target)
       (funcall action username host repository target))))
 
+;;;###autoload
+(defun gitolite-clone-force-refresh (&optional username host)
+  (interactive)
+  (gitolite-clone-get-projects username host t))
+
 (provide 'gitolite-clone)
 ;;; gitolite-clone.el ends here
