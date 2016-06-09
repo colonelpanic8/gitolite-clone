@@ -40,7 +40,7 @@
 (defcustom gitolite-clone-host ""
   "The gitolite host that will be connected to by default by gitoline-clone."
   :group 'gitolite-clone)
-(defcustom gitolite-clone-ttl (* 60 60 24 3)
+(defcustom gitolite-clone-ttl nil
   "The default pcache ttl that will be used for caching repository results from gitolite."
   :group 'gitolite-clone)
 (defcustom gitolite-clone-base-path "~"
